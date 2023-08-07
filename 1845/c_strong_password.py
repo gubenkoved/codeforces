@@ -17,28 +17,23 @@ def solve_one(s, m, l, r):
     l = [int(x) for x in l]
     r = [int(x) for x in r]
 
-    def pick(idx, s_offset):
-        if idx == m:
+    # greedily pick the number which cuts biggest amount of "database"
+    db_offset = 0
+    for idx in range(m):
+        if db_offset >= len(s):
             return 'YES'
-
+        max_db_offset = None
         for c in range(l[idx], r[idx] + 1):
-            # try to find it the "c" inside the database starting at given offset
-            db_idx = s2[s_offset][c] if s_offset < len(s) else None
+            cur_db_offset = s2[db_offset][c]
+            if cur_db_offset is None:
+                return 'YES'
+            max_db_offset = (
+                max(max_db_offset, cur_db_offset)
+                if max_db_offset is not None else cur_db_offset
+            )
+        db_offset = max_db_offset + 1
 
-            if db_idx is None:
-                return True
-
-            # recursive dive
-            sub_result = pick(idx + 1, db_idx + 1)
-
-            if sub_result is True:
-                return True
-
-        return False
-
-    found = pick(0, 0)
-
-    return 'YES' if found else 'NO'
+    return 'NO'
 
 
 def solve():
