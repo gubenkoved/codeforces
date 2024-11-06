@@ -33,8 +33,9 @@ start = None
 while ranges_heap:
     x, is_end = heapq.heappop(ranges_heap)
     if not is_end:
+        if counter == 0:
+            start = x
         counter += 1
-        start = x
     else:
         counter -= 1
         if counter == 0:
@@ -127,7 +128,7 @@ for type, x, y in figures_compressed:
         trace(x, y, -1, +1)
         trace(x, y, -1, -1)
     else:
-        assert False, "what?"
+        assert False, "what? %s" % type
 
 # now finally run dijkstra, considering speedlines can only be crossed w/o turns and they cost
 # more than 1 but amount of skipped columns it encodes
